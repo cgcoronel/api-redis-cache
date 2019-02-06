@@ -26,21 +26,21 @@ app.get('/api/search', (req, res) => {
   const searchUrl = `http://localhost:3678/api/productos`;
 
   // Try fetching the result from Redis first in case we have it cached
-  return client.get(`wikipedia:${query}`, (err, result) => {
+  return client.get(`productos:${query}`, (err, result) => {
     // If that key exist in Redis store
     if (result) {
       const resultJSON = JSON.parse(result);
       return res.status(200).json(resultJSON);
     } else { // Key does not exist in Redis store
-      // Fetch directly from Wikipedia API
+      // Fetch directly from productos API
       return axios.get(searchUrl)
         .then(response => {
           const responseJSON = response.data;
-          // Save the Wikipedia API response in Redis store
-          client.setex(`wikipedia:${query}`, 3600, 
+          // Save the productos API response in Redis store
+          client.setex(`productos:${query}`, 3600, 
             JSON.stringify({ source: 'Redis Cache', ...responseJSON, }));
           // Send JSON response to client
-          return res.status(200).json({ source: 'Wikipedia API', ...responseJSON, });
+          return res.status(200).json({ source: 'Productos API', ...responseJSON, });
         })
         .catch(err => {
           return res.json(err);
