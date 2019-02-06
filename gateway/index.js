@@ -37,7 +37,8 @@ app.get('/api/search', (req, res) => {
         .then(response => {
           const responseJSON = response.data;
           // Save the Wikipedia API response in Redis store
-          client.setex(`wikipedia:${query}`, 3600, JSON.stringify({ source: 'Redis Cache', ...responseJSON, }));
+          client.setex(`wikipedia:${query}`, 3600, 
+            JSON.stringify({ source: 'Redis Cache', ...responseJSON, }));
           // Send JSON response to client
           return res.status(200).json({ source: 'Wikipedia API', ...responseJSON, });
         })
