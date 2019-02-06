@@ -1,0 +1,7 @@
+
+
+api-restful-redis-mongo/data
+api-restful-redis-mongo/node_modules
+gateway/node_modules
+gateway/data
+
